@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDE para Tokens FitScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .option-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .option-buttons button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .option-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .file-upload, .manual-input {
+            display: none;
+            width: 100%;
+        }
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        input[type="submit"].enabled {
+            opacity: 1;
+            cursor: pointer;
+        }
+        .token-list {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .token-item {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IDE para Tokens FitScript</h1>
+        <h2>Por Santiago Dávila y Miguel Carrillo</h2>
+        <div class="option-buttons">
+            <button type="button" onclick="showOption('file-upload')">Sube un archivo</button>
+            <p> - o -</p>
+            <button type="button" onclick="showOption('manual-input')">Escribe</button>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            <div id="file-upload" class="file-upload">
+                <input type="file" name="file" accept=".txt" onchange="enableSubmit()">
+            </div>
+            <div id="manual-input" class="manual-input">
+                <textarea name="manual_text" placeholder="Escribe tu texto aquí..." oninput="enableSubmit()"></textarea>
+            </div>
+            <input type="submit" value="Cargar" id="submit-btn" disabled>
+        </form>
+        {% if tokens %}
+            <div class="token-list">
+                <h3>Lista de Tokens:</h3>
+                {% for token in tokens %}
+                    <div class="token-item">Token: {{ token.token }}, Lexema: {{ token.lexeme }}, Posición: {{ token.pos }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        function showOption(option) {
+            document.getElementById('file-upload').style.display = 'none';
+            document.getElementById('manual-input').style.display = 'none';
+            document.getElementById(option).style.display = 'block';
+
+            // Deshabilitar el botón de enviar cuando se selecciona una nueva opción
+            document.getElementById('submit-btn').classList.remove('enabled');
+            document.getElementById('submit-btn').disabled = true;
+        }
+
+        function enableSubmit() {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.classList.add('enabled');
+            submitBtn.disabled = false;
+        }
+    </script>
+</body>
+</html>
