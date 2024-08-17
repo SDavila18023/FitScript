@@ -7,14 +7,12 @@ class LexerException(Exception):
 
 class Token:
     EPSILON = 0
-    PLUSMINUS = 1
-    MULTDIV = 2
-    RAISED = 3
-    FUNCTION = 4
-    OPEN_BRACKET = 5
-    CLOSE_BRACKET = 6
-    NUMBER = 7
-    VARIABLE = 8
+    UNIT = 1
+    NUMBER = 2
+    FUNCTION = 3
+    DELIMITER = 4
+    VALUE = 5
+    STRING = 6
 
     def __init__(self, token, lexeme, pos):
         self.token = token
@@ -79,16 +77,14 @@ def index():
             file_content = request.form["manual_text"]
 
         if file_content:
-            # Tokenize the content
+
             tokenizer = Tokenizer()
-            tokenizer.add("ClassRoom|Begin|End|ln|sqrt", Token.FUNCTION)  # function
-            tokenizer.add(r"\(", Token.OPEN_BRACKET)  # open bracket
-            tokenizer.add(r"\)", Token.CLOSE_BRACKET)  # close bracket
-            tokenizer.add(r"[+-]", Token.PLUSMINUS)  # plus or minus
-            tokenizer.add(r"[*/]", Token.MULTDIV)  # mult or divide
-            tokenizer.add(r"\^", Token.RAISED)  # raised
-            tokenizer.add(r"[0-9]+", Token.NUMBER)  # integer number
-            tokenizer.add(r"[a-zA-Z][a-zA-Z0-9_]*", Token.VARIABLE)  # variable
+            tokenizer.add("rutina|datos_personales|peso|altura|edad|actividad_semanal|objetivo|dieta", Token.FUNCTION)  
+            tokenizer.add("años|kg|cm", Token.UNIT) 
+            tokenizer.add(r"\{|\}", Token.DELIMITER)  
+            tokenizer.add("definir|perder grasa|volumen|sedentario|activo|atleta", Token.VALUE)  
+            tokenizer.add(r"[0-9]+", Token.NUMBER)  
+            tokenizer.add(r'"[^"]*"|\'[^\']*\'', Token.STRING) 
 
             try:
                 tokenizer.tokenize(file_content)
